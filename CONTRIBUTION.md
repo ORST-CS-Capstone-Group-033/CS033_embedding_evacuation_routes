@@ -35,7 +35,7 @@ EX: - implemented fire mechanics, needs work
 
 ## Code Style, Linting & Formatting
 
-It's a project done primaly in Unity and C#, there shouldn't be any major format concerns.
+It's a project done primarily in Unity and C#, there shouldn't be any major format concerns.
 
 ## Testing
 
