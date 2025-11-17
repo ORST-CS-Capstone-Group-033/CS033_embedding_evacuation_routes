@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+//Need to add ability for player to move on the Z axis (up and down) so it can manuver on rigid terrain
+//Additionally jumping will be very useful for non flat terrain
+//Also needs to implement a sprint mechanic of some sort 
 [RequireComponent(typeof(CharacterController))]
 public class FirstPersonMovement : MonoBehaviour
 {
