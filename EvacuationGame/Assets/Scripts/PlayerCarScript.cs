@@ -5,19 +5,34 @@ public class PlayerCarScript : MonoBehaviour
 
     bool driving = true; // if false, the car cannot be controlled.
     bool lightsOn = false;
-    public Rigidbody rb;
-    public WheelCollider w1, w2, w3, w4;  // The four wheels,
+    [SerializeField] Rigidbody rb;
+    [SerializeField] WheelCollider w1, w2, w3, w4;  // The four wheels,
 
     [SerializeField] float steeringSpeed;
     [SerializeField] float acceleration = 450f;
     private float currentAcceleration = 0f;
     float XInput, YInput;
     [SerializeField] float maxCarHealth;
-    private float currentCarHealth;
+    [SerializeField] float currentCarHealth;
     bool breaking = false;
+
+    [SerializeField] GameObject CameraObject;
+    [SerializeField] GameObject SteeringWheel;
+
+    // Temporary, should be replaced with ball-joint swiveling camera
+    Vector3 ogCamPos;
+    Vector3 ogWheelPos;
+
+    int cameraDirect = 0;
+    float goalRotate = 45f;
+    float minimumDamageForce = 100000f;
+
     // Start is called before the first frame update
     void Start()
     {
+        ogCamPos = CameraObject.transform.localEulerAngles;
+        ogWheelPos = SteeringWheel.transform.localEulerAngles;  
+        driving = true;
         currentCarHealth = maxCarHealth;
     }
 
@@ -34,7 +49,6 @@ public class PlayerCarScript : MonoBehaviour
         YInput = Input.GetAxis("Vertical");
         if (Input.GetKey(KeyCode.Space))
         {
-
             breaking = true;
         }
         else
@@ -48,10 +62,29 @@ public class PlayerCarScript : MonoBehaviour
             Debug.Log("Headlights");
             lightsOn = !lightsOn;
         }
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            cameraDirect = 1;
+        }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            cameraDirect = -1;
+        }
+        else
+        {
+            cameraDirect = 0;
+        }
     }
 
     private void FixedUpdate() //  this is where physics are mostly applied.
     {
+
+        if (!driving)
+        {
+
+            return;
+        }
         //float engineCalcs = Input.GetAxis("Vertical") * drivingSpeed;
         currentAcceleration = Input.GetAxis("Vertical") * acceleration;
         w1.motorTorque = currentAcceleration;
@@ -77,22 +110,43 @@ public class PlayerCarScript : MonoBehaviour
 
             }
         }
+        if (CameraObject)
+        {
+
+            Quaternion quatOfCamera = Quaternion.Euler(ogCamPos + new Vector3(0, (45f * -cameraDirect), 0));
+            CameraObject.transform.localRotation = Quaternion.Lerp(CameraObject.transform.localRotation, quatOfCamera, .5f);
+
+        }
+        if (SteeringWheel)
+        {
+
+            Quaternion quatOfCamera = Quaternion.Euler(ogWheelPos + new Vector3((225f * -XInput), 0, 0));
+            SteeringWheel.transform.localRotation = Quaternion.Lerp(SteeringWheel.transform.localRotation, quatOfCamera, steeringSpeed);
+        }
     }
     /*
      * Applys damage to the car, currently non functional.
      */
     void applyCarDamage(float force)
     {
+        currentCarHealth -= force;
 
-        currentCarHealth -= Mathf.Clamp(force * 1.5f,0,1000); // this will need to be tacked to something more substantial
-        if (currentCarHealth < 0)
+        if(currentCarHealth < 0)
         {
-            driving = false;
+            driving = false; // car has been destroyed
         }
-        else
-        {
 
-            // space for damage visuals
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Vector3 collidePower = collision.impulse / Time.fixedDeltaTime;
+        if (collidePower.magnitude > minimumDamageForce)
+        {
+            float dmg = collidePower.magnitude / 1000f;
+            Mathf.Clamp(dmg, 100, 15000);
+
+            applyCarDamage(dmg);
         }
     }
     void applyBrake() // brakes use the brakeTorque. most cars have brakes only in the front.
