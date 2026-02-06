@@ -255,8 +255,8 @@ Transform:
   m_GameObject: {fileID: 658641142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 83.326324, y: 83.326324, z: 83.326324}
+  m_LocalPosition: {x: 0, y: 0, z: -519}
+  m_LocalScale: {x: 131.03084, y: 10, z: 14.545604}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -276,8 +276,10 @@ MonoBehaviour:
   obstaclePrefabs:
   - {fileID: 961513276}
   - {fileID: 1280916887}
-  obstacleCount: 20
-  heightOffset: 0.1
+  obstacleCount: 5
+  heightOffset: 1
+  minXSpacing: 3
+  maxSpawnAttempts: 20
 --- !u!64 &658641148
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -524,8 +526,8 @@ Transform:
   m_GameObject: {fileID: 961513276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 352.2397, y: 2.5, z: 174.41866}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 352.2397, y: 24.9, z: -402.8}
+  m_LocalScale: {x: 24.727291, y: 24.727291, z: 24.727291}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -721,8 +723,8 @@ Transform:
   m_GameObject: {fileID: 1280916887}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 352.2397, y: 3.1, z: 222.7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 352.2397, y: 3.1, z: -762}
+  m_LocalScale: {x: 48.99086, y: 48.99086, z: 48.99086}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
