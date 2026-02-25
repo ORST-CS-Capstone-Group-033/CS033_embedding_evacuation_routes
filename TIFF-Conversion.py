@@ -54,7 +54,7 @@ def process_geotiff(input_filename, output_filename):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2 or len(sys.argv) > 3:
-        print("Usage: python script.py <input_filename> [<output_filename>]")
+        print("Usage: python TIFF-Conversion.py <input_filename> [<output_filename>]")
         sys.exit(1)
     
     input_filename = sys.argv[1]
