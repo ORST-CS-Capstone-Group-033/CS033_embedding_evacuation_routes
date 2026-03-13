@@ -24,14 +24,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5631289713869856088}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0.12059043, y: 0.37940952, z: -0.04995019, w: 0.9159757}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 454903455657686026}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 15, y: 45, z: 0}
 --- !u!1 &6738783132798404922
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 454903455657686026}
   - component: {fileID: 3001631213899106475}
   - component: {fileID: 6533730061243801946}
+  - component: {fileID: 5388053085388099625}
   m_Layer: 0
   m_Name: Rock
   m_TagString: Untagged
@@ -59,7 +60,7 @@ Transform:
   m_GameObject: {fileID: 6738783132798404922}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.32, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -114,4 +115,26 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6738783132798404922}
+  m_Mesh: {fileID: -2432090755550338912, guid: 25a3cf87b33b2d946a07544455601f52, type: 3}
+--- !u!64 &5388053085388099625
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6738783132798404922}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
   m_Mesh: {fileID: -2432090755550338912, guid: 25a3cf87b33b2d946a07544455601f52, type: 3}
