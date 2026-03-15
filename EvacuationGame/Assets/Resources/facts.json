@@ -1,0 +1,134 @@
+{
+  "landslide_science": {
+    "sources": [
+      {
+        "source": "ready_gov",
+        "quotes": [
+          "Landslides occur in all U.S. states and territories and can be caused by many factors including earthquakes, storms, volcanic eruptions, fire and human modifications of land.",
+          "The most dangerous, life-threatening and deadliest landslides are the ones that occur quickly, often with little notice.",
+          "A landslide occurs when masses of rock, mud or debris move down a slope.",
+          "When a wildfire burns a slope, it increases the chance of landslides for several years.",
+          "Not all landslides are fast. Some slow-moving landslides move at a snail’s pace, stopping and starting, and not advancing more than three feet a year. While these landslides rarely cause loss of life, they can cause damage to land and property over time.",
+          "Huge boulders in the landscape can be signs of past debris flows."
+        ]
+      },
+      {
+        "source": "cdc",
+        "quotes": [
+          "Landslides occur when masses of rock, earth, or debris move down a slope.",
+          "Debris flows, also known as mudslides, are a common type of fast-moving landslide that tends to flow in channels.",
+          "Landslides are caused by disturbances in the natural stability of a slope. They can accompany heavy rains or follow droughts, earthquakes, or volcanic eruptions.",
+          "Mudslides develop when water rapidly accumulates in the ground and results in a surge of water-saturated rock, earth, and debris. Mudslides usually start on steep slopes and can be activated by natural disasters.",
+          "In the United States, landslides and debris flows result in 25 to 50 deaths each year.",
+          "Some areas are more likely to experience landslides or mudslides, including areas where wildfires or human modification of the land have destroyed vegetation, areas where landslides have occurred before, steep slopes and areas at the bottom of slopes or canyons, slopes that have been altered for construction of buildings and roads, channels along a stream or river, and areas where surface runoff is directed."
+        ]
+      },
+      {
+        "source": "usgs",
+        "quotes": [
+          "Landslides occur in all 50 states and territories and they affect lives, property, infrastructure, and the environment.",
+          "Landslides are the downslope movement of earth materials (rock, debris, and soil) at rates that range from inches per year to tens of miles per hour.",
+          "Some landslides can move faster than a person can run.",
+          "Landslides can happen with no notice or can take place over a period of days, weeks, or longer.",
+          "Landslides occur in every state and U.S. territory including the Appalachian Mountains, the Rocky Mountains, the Pacific Coastal Ranges, and some parts of Alaska and Hawaii.",
+          "Any area composed of very weak or fractured materials resting on a steep slope can and will likely experience landslides.",
+          "Landslides are dangerous and very difficult to predict.",
+          "Some landslides may provide clues that they are about to happen; others may happen suddenly without any warning signs."
+        ]
+      }
+    ]
+  },
+
+  "evacuation_behavior": {
+    "sources": [
+      {
+        "source": "ready_gov",
+        "quotes": [
+          "If you are near a wildfire burn area, sign up for emergency alerts and pay attention to weather forecasts for the burn area.",
+          "Listen and watch for rushing water, mud or unusual sounds.",
+          "Unusual sounds such as trees cracking or boulders knocking together, might indicate moving debris.",
+          "A faint rumbling sound that increases in volume is noticeable as the landslide nears.",
+          "Listen to local news stations on a battery-powered radio for warnings.",
+          "Always follow the instructions from local emergency managers. They provide the latest recommendations based on the threat in your community.",
+          "Stay alert and awake during a storm that could cause a landslide. Many deaths from landslides occur while people are sleeping.",
+          "Be aware that by the time you are sure a debris flow is coming, it will be too late to get away safely.",
+          "Never cross a road with water or mud flowing.",
+          "Never cross a bridge if you see a flow approaching because it can grow faster and larger too quickly for you to escape.",
+          "If you do get stuck in the path of a landslide move uphill as quickly as possible.",
+          "Avoid river valleys and low-lying areas during times of danger.",
+          "If you are near a stream or channel, be alert for any sudden increase or decrease in water flow or water that changes from clear to muddy. These can be signs that a landslide is coming."
+        ]
+      },
+      {
+        "source": "cdc",
+        "quotes": [
+          "Stay alert during intense storms or rainfall.",
+          "Be aware of any sudden increase or decrease in water level on a stream or creek that might indicate debris flow upstream.",
+          "A trickle of flowing mud may precede a larger flow.",
+          "Look for tilted trees, telephone poles, fences, or walls, and for new holes or bare spots on hillsides.",
+          "Listen for rumbling sounds that might indicate an approaching landslide or mudflow.",
+          "Be alert when driving. Roads may become blocked or closed due to collapsed pavement or debris.",
+          "Quickly move away from the path of a landslide or debris flow.",
+          "Getting out of the path of a debris flow is your best protection.",
+          "If rocks and debris are approaching, run for the nearest shelter and take cover (if possible, under a desk, table, or other piece of sturdy furniture)."
+        ]
+      }
+    ]
+  },
+
+  "post_disaster_safety": {
+    "sources": [
+      {
+        "source": "ready_gov",
+        "quotes": [
+          "Stay away from the slide area. There may be danger coming from additional slides.",
+          "Listen to local radio or television stations for the latest emergency information.",
+          "Watch for flooding. Floods sometimes follow landslides and debris flows because they may both be started by the same conditions.",
+          "Check for injured and trapped persons near the slide, without entering the direct slide area.",
+          "Report broken utility lines and damaged roadways and railways to appropriate authorities.",
+          "Allow trained professionals to check the building foundation, chimney, and surrounding land for damage.",
+          "Replant damaged ground as soon as possible since erosion caused by loss of ground cover can lead to flash flooding and additional landslides in the near future.",
+          "Seek advice from a geotechnical expert for evaluating landslide hazards or designing corrective techniques to reduce landslide risk."
+        ]
+      },
+      {
+        "source": "cdc",
+        "quotes": [
+          "Stay safe after a landslide or mudslide.",
+          "Stay away from the site. Flooding or additional slides may occur after a landslide or mudflow.",
+          "Check for injured or trapped people near the affected area, if it is possible to do so without entering the path of the landslide or mudflow.",
+          "Listen to the radio or TV for emergency information.",
+          "Report broken utility lines to the appropriate authorities.",
+          "Consult a geotechnical expert (a registered professional engineer with soils engineering expertise) for advice on reducing additional landslide problems and risks."
+        ]
+      },
+      {
+        "source": "usgs",
+        "quotes": [
+          "Depending on the severity of the landslide, you may not be able to return home right away.",
+          "If authorities say it is safe to return to your home, continue to be prepared to leave the area immediately if you observe unusual activity."
+        ]
+      }
+    ]
+  },
+
+  "risk_awareness": {
+    "sources": [
+      {
+        "source": "usgs",
+        "quotes": [
+          "Understanding when, where, and how landslides occur can help to reduce the risk of living with these natural hazards."
+        ]
+      },
+      {
+        "source": "crs",
+        "quotes": [
+          "The U.S. Geological Survey’s Landslide Hazards Program (LHP) is the only federal program dedicated to landslide hazard science and applications.",
+          "The National Landslide Preparedness Act directed the Secretary of the Interior, acting through the Director of the USGS, to establish a National Landslide Hazards Reduction Program and a three-dimensional elevation program.",
+          "The complementary 3DEP, within the USGS National Geospatial Program, aims to map the nation’s topography and built environment to better identify landslide hazards and risks.",
+          "Landslides may be divided into four types based on the mode of slope movement—falls, topples, slides, spreads, or flows—and the type of materials in the slide—rock, soil, water, and other debris."
+        ]
+      }
+    ]
+  }
+}

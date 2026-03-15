@@ -78,16 +78,37 @@ MemorySnapshots/
 Multiplayer/
 Netcode/
 obj/
-Packages/
 PerformanceReports/
 ProfilerData/
 ProjectSettings.asset
-ProjectSettings/
 StreamingAssets/
 TestResults/
 UserSettings/
 WebGL/
 EvacuationGame/Assets/Meshes/TestImplements/GovernmentCampTerrainRoad.obj
+
+# Unity generated folders
+Temp/
+Logs/
+MemoryCaptures/
+
+# VS cache
+.vs/
+*.vsidx
+
+# Build artifacts
+Builds/
+
+# Crash reports
+CrashReports/
+
+# Rider / JetBrains
+.idea/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
 # ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 # TESTING & QUALITY ASSURANCE ARTIFACTS
 # ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••

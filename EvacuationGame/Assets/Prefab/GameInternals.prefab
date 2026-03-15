@@ -546,6 +546,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSetup: {fileID: 7038305208993089239}
+--- !u!1 &5395699444378471031
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5300591048580255995}
+  - component: {fileID: 937702099378336528}
+  m_Layer: 0
+  m_Name: FactManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5300591048580255995
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5395699444378471031}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 420.09644, y: 28.349783, z: -88.01854}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9114899362679858520}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &937702099378336528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5395699444378471031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f2abca6b9224e4588ff1f63deb7f97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  facts:
+    landslide_science:
+      sources: []
+    evacuation_behavior:
+      sources: []
+    post_disaster_safety:
+      sources: []
+    risk_awareness:
+      sources: []
 --- !u!1 &5488081138915650547
 GameObject:
   m_ObjectHideFlags: 0
@@ -926,6 +979,7 @@ Transform:
   - {fileID: 3447556892099097262}
   - {fileID: 8456248915628584146}
   - {fileID: 437198210926620329}
+  - {fileID: 5300591048580255995}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7038305208993089239
