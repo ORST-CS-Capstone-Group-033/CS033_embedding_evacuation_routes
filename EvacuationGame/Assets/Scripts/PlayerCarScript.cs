@@ -1,15 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCarScript : MonoBehaviour
 {
 
-    bool driving = true; // if false, the car cannot be controlled.
+    public bool driving = true; // if false, the car cannot be controlled.
     bool lightsOn = false;
     bool breaking = false;
-
-
+    bool inDanger = false;
+    bool canDanger = true;
     [SerializeField] Rigidbody rb; 
     [SerializeField] WheelObject w1, w2, w3, w4;
 
@@ -36,6 +37,7 @@ public class PlayerCarScript : MonoBehaviour
     private float recAngularVelo = 0f;
 
     [SerializeField] GameObject CrashEffect; // gameobject that is genreated during a crash.
+    [SerializeField] GameSetup gameSetup;
     // Start is called before the first frame update
     void Start()
     {
@@ -167,6 +169,7 @@ public class PlayerCarScript : MonoBehaviour
 
             crashEffectClone.transform.position = hitPos;
             crashEffectClone.GetComponent<ParticleSystem>().Emit(UnityEngine.Random.Range(5,10)); // a crash effect must have particle system inside.
+            gameSetup.ModScore((int)force * 2);
             Destroy(crashEffectClone, 1.5f);
         }
         if (currentCarHealth < 0)
@@ -202,7 +205,14 @@ public class PlayerCarScript : MonoBehaviour
 
 
     }
+    private void DebugRays(WheelObject w, float resultant)
+    {
+        float maxX = w.angularVelocity;
+        Debug.DrawLine(w.WheelTF.transform.position, w.WheelTF.transform.position + transform.up * w.maxSuspension, Color.yellow);
+        Debug.DrawRay(w.WheelTF.position + transform.forward * .5f, transform.forward * (maxX / 5f), Color.red);
+        Debug.DrawRay(w.WheelTF.position, w.WheelTF.up * (resultant / 100f), Color.magenta);
 
+    }
     private void DoWheelMath(WheelObject w, bool steering = false)
     {
         Vector3 wOrigin = w.WheelTF.position;
@@ -258,7 +268,6 @@ public class PlayerCarScript : MonoBehaviour
             float desiredAcceleration = currentAcceleration;
 
 
-
             float computedWheelForce = computeWheelForce(w, forwardSpeed, (springForce + damperPower));
             if (YInput == -1 && w.angularVelocity < 0.1f) desiredAcceleration *= .25f;
 
@@ -277,8 +286,9 @@ public class PlayerCarScript : MonoBehaviour
 
             resultingSlipProduct = Mathf.Clamp(resultingSlipProduct, (springForce + damperPower) * -50f, (springForce + damperPower) * 50f); // why are we clamping?
             rb.AddForceAtPosition(rightward * resultingSlipProduct, hit.point);
+            DebugRays(w,resultingSlipProduct);
 
-           
+
             if (breaking && steering)
             {
                 rb.AddForceAtPosition(-forward * (550f * forwardSpeed * w.frontGripLevel), hit.point);
@@ -293,8 +303,7 @@ public class PlayerCarScript : MonoBehaviour
         w.angularVelocity = Mathf.Clamp(w.angularVelocity, -maxEngineTorque, maxEngineTorque); // be sure to clamp velocity.
 
         w.angularVelocity *= .975f;
-
-        if(w == w3) // only one non-steering wheel records 
+        if (w == w3) // only one non-steering wheel records 
         {
             recAngularVelo = Mathf.Abs(w.angularVelocity); // steering wheels control
         }
@@ -308,6 +317,37 @@ public class PlayerCarScript : MonoBehaviour
 
       
 
+    }
+
+
+
+    /*
+     *  Ontrigger stay ticks every secound, checking whether or not we are in danger.
+     */
+    private void OnTriggerStay(Collider other)
+    {
+        if (!driving)
+        {
+            return;
+        }
+        if(other.gameObject.tag == "DangerZone" && canDanger)
+        {
+
+            // add a intensity modifer somewhere
+            canDanger = false;
+            gameSetup.ModScore(4);
+            Debug.Log("Ticked down score.");
+            StartCoroutine(LazyDangerTick());
+        }
+    }
+
+
+    IEnumerator LazyDangerTick()
+    {
+
+        yield return new WaitForSeconds(.5f);
+
+        canDanger = true;
     }
 
 }
