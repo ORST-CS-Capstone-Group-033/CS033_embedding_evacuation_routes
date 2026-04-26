@@ -1218,6 +1218,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCar
       objectReference: {fileID: 0}
+    - target: {fileID: 858119597513285944, guid: 1fac06e5dba7f234f8e92eab6e871036, type: 3}
+      propertyPath: idleSource
+      value: 
+      objectReference: {fileID: 643515917}
+    - target: {fileID: 858119597513285944, guid: 1fac06e5dba7f234f8e92eab6e871036, type: 3}
+      propertyPath: accelSource
+      value: 
+      objectReference: {fileID: 2051641259}
     - target: {fileID: 3794308653037202050, guid: 1fac06e5dba7f234f8e92eab6e871036, type: 3}
       propertyPath: m_LocalPosition.x
       value: -68.29
@@ -1258,6 +1266,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4657581370556636639, guid: 1fac06e5dba7f234f8e92eab6e871036, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 03a406f650038874d96c815dc7c0ee54, type: 3}
     - target: {fileID: 5967550908024549900, guid: 1fac06e5dba7f234f8e92eab6e871036, type: 3}
       propertyPath: gameSetup
       value: 
@@ -1525,6 +1537,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!82 &643515917 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 5808077782702570619, guid: 1fac06e5dba7f234f8e92eab6e871036, type: 3}
+  m_PrefabInstance: {fileID: 505779952}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &651083994
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,12 +2220,12 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 13d260747138ad94ea79898677573180, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -4029,6 +4046,11 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!82 &2051641259 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 4657581370556636639, guid: 1fac06e5dba7f234f8e92eab6e871036, type: 3}
+  m_PrefabInstance: {fileID: 505779952}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2053771513
 GameObject:
   m_ObjectHideFlags: 0

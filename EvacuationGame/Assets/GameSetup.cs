@@ -161,20 +161,27 @@ public class GameSetup : MonoBehaviour
         // Pause the game                   -- MM
         Time.timeScale = 0f;
 
-		// Show the final score             -- MM
-        ScoreEndText.text = "Total Danger Left: " + Score.ToString();
-        ScoreEndText.enabled = true;
+        // Fade out the sounds			    -- MM
+        var engineSound = FindObjectOfType<EngineSound>();
+        if (engineSound != null)
+        {
+            engineSound.FadeOutEngine(1f);
 
-        // Show final time                  -- MM
-        finalTimeText.text = "Time: " + timerUI.GetFinalTime().ToString("0.00");
+            // Show the final score             -- MM
+            ScoreEndText.text = "Total Danger Left: " + Score.ToString();
+            ScoreEndText.enabled = true;
 
-		// Show the final UI panel          -- MM
-        finalPanel.SetActive(true);
+            // Show final time                  -- MM
+            finalTimeText.text = "Time: " + timerUI.GetFinalTime().ToString("0.00");
 
-        // Show the fact panel              -- MM
-        var (theme, source, quote) = FactManager.Instance.GetRandomFact();
-        factPanel.Show(theme, source, quote);
-	}
+            // Show the final UI panel          -- MM
+            finalPanel.SetActive(true);
+
+            // Show the fact panel              -- MM
+            var (theme, source, quote) = FactManager.Instance.GetRandomFact();
+            factPanel.Show(theme, source, quote);
+        }
+    }
 
 /* Logic added to StartEndScript()          -- MM
 	IEnumerator EndScript()
