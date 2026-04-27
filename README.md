@@ -9,19 +9,19 @@ It's our team's belief that the best way to learn is through experience. Through
 
 ## About Our Project
 
-*Brief overview of our project's features
+Our game attempts to accurately simmulate what real natural disaster situations on Oregon roadways might look like.
 
-### Feature 1 desc
+### Generating levels from real Oregon roadways
 
-F1 text
+Explore a variety of levels based on real locations from within Oregon. All roadways are created using open-source streetmaps to ensure evacuation routes taught are applicable to real world situations.
 
-### Feature 2 desc
+### Creating disasters that force evacuation
 
-F2 text
+Respond to two of the most common evacuation disasters.Landslides will block potential roads and make finding safe evacuation routes tricky. Wildfires will dynamically expand and limit where players can safely travel.
 
-### Feature 3 desc
+### Creating a game that incentivises fun as much as learning
 
-F3 text
+Players will be able to explore and play by taking control of a car. By incorporating realistic physics, car-damage, and a scoring system, players can have fun trying to beat each level alongside learning.
 
 
 ## Get Started
