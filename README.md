@@ -23,6 +23,9 @@ Respond to two of the most common evacuation disasters.Landslides will block pot
 
 Players will be able to explore and play by taking control of a car. By incorporating realistic physics, car-damage, and a scoring system, players can have fun trying to beat each level alongside learning.
 
+<img width="789" height="478" alt="frnpic" src="https://github.com/user-attachments/assets/186cb249-8d5a-4acd-a203-6dd83586185f" />
+
+
 
 ## Get Started
 
