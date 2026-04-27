@@ -1,3 +1,32 @@
+#Educating safety on Oregon's roadways through simulation
+
+Synopsis of project's goal
+
+
+##About Our Project
+
+*Brief overview of our project's features
+
+###Feature 1
+
+F1 text
+
+###Feature 2
+
+F2 text
+
+###Feature 3
+
+F3 text
+
+
+##Get Started
+
+Description on how to download/run our project
+
+
+##Contributors:
+
 Project Team Members:
 - Fern Higgins
 - Larsen Freund
