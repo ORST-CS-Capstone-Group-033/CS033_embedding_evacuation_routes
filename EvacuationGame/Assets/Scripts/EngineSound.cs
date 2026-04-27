@@ -6,6 +6,8 @@ public class EngineSound : MonoBehaviour
 	public AudioSource idleSource;
 	public AudioSource accelSource;
 
+	[HideInInspector] public float sfxVolumeMultiplier = 1f;
+
 	public float maxSpeed = 20f;
 	public float minPitch = 0.8f;
 	public float maxPitch = 2.0f;
@@ -25,21 +27,17 @@ public class EngineSound : MonoBehaviour
 	private IEnumerator FadeOutRoutine(float duration)
 	{
 		float t = 0f;
-		float startIdle = idleSource.volume;
-		float startAccel = accelSource.volume;
 
 		while (t < duration)
 		{
 			t += Time.unscaledDeltaTime;
 			float lerp = 1f - (t / duration);
-			idleSource.volume = startIdle * lerp;
-			accelSource.volume = startAccel * lerp;
+
+			idleSource.volume = Mathf.Lerp(0.25f, 0.05f, rb.velocity.magnitude / maxSpeed);
+			accelSource.volume = Mathf.Lerp(0.0f, 0.7f, rb.velocity.magnitude / maxSpeed);
 
 			yield return null;
 		}
-
-		idleSource.volume = 0f;
-		accelSource.volume = 0f;
 	}
 
 	private void Update()
@@ -53,7 +51,7 @@ public class EngineSound : MonoBehaviour
 		accelSource.pitch = pitch;
 
 		// Blend volumes
-		idleSource.volume = Mathf.Lerp(0.25f, 0.05f, t);
-		accelSource.volume = Mathf.Lerp(0.0f, 0.7f, t);
+		idleSource.volume = Mathf.Lerp(0.25f, 0.05f, t) * sfxVolumeMultiplier;
+		accelSource.volume = Mathf.Lerp(0.0f, 0.7f, t) * sfxVolumeMultiplier;
 	}
 }

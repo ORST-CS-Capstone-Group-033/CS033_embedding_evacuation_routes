@@ -16,6 +16,7 @@ public class GameSetup : MonoBehaviour
     int Score = 10000;
     int MaxScore = 10000;
     bool gameRunning = false;
+    public bool gameEnded = false;
 
     [SerializeField] TextMeshProUGUI ScoreEndText;
 
@@ -154,33 +155,34 @@ public class GameSetup : MonoBehaviour
             return;
 
         gameRunning = false;
+        gameEnded = true;
 
-        // Stop the car                     -- MM
-        pCar.driving = false;
+		// Stop the car                     -- MM
+		pCar.driving = false;
 
-        // Pause the game                   -- MM
-        Time.timeScale = 0f;
-
-        // Fade out the sounds			    -- MM
+		// Fade out the sounds			    -- MM
         var engineSound = FindObjectOfType<EngineSound>();
         if (engineSound != null)
         {
             engineSound.FadeOutEngine(1f);
-
-            // Show the final score             -- MM
-            ScoreEndText.text = "Total Danger Left: " + Score.ToString();
-            ScoreEndText.enabled = true;
-
-            // Show final time                  -- MM
-            finalTimeText.text = "Time: " + timerUI.GetFinalTime().ToString("0.00");
-
-            // Show the final UI panel          -- MM
-            finalPanel.SetActive(true);
-
-            // Show the fact panel              -- MM
-            var (theme, source, quote) = FactManager.Instance.GetRandomFact();
-            factPanel.Show(theme, source, quote);
         }
+
+		// Pause the game                   -- MM
+		Time.timeScale = 0f;
+
+        // Show the final score             -- MM
+        ScoreEndText.text = "Total Danger Left: " + Score.ToString();
+        ScoreEndText.enabled = true;
+
+        // Show final time                  -- MM
+        finalTimeText.text = "Time: " + timerUI.GetFinalTime().ToString("0.00");
+
+        // Show the final UI panel          -- MM
+        finalPanel.SetActive(true);
+
+        // Show the fact panel              -- MM
+        var (theme, source, quote) = FactManager.Instance.GetRandomFact();
+        factPanel.Show(theme, source, quote);
     }
 
 /* Logic added to StartEndScript()          -- MM
