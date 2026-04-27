@@ -22,7 +22,7 @@ F3 text
 
 ## Get Started
 
-Description on how to download/run our project
+To run the game, download the "Evacutation Game" folder. Unity editor version 2022.3.30f1 is required to run the project. Within the Unity Hub, click "Add project from disk" and select the folder. We recommend having the folder in a location higher up in the file tree. After you add the project, open it up in the Unity Editor. Once it's open, click on the "Scenes" folder, then double click on "SampleScene." From there, make sure the "Game" tab is selected, and then press play.
 
 
 ## Contributors:
