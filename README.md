@@ -1,6 +1,10 @@
 # Educating safety on Oregon's roadways through simulation
 
-Synopsis of project's goal
+Our project, through the medium of video games, aims to prepare and inform safe driving precautions to Oregon residents during natural disaster events.
+
+Natural disasters are unpredictable, and many people are often unprepared to take action when one does occur. When natural disasters eventually end up affecting a section of Oregon's roadways, lack of information on proper escape route disaster planning will lead drivers into putting themselves or others into danger due. Since Oregon's roadways span over a variety of climates and ecoregions, it would be difficult for the average resident to educate themselves on roadway disaster planning. 
+
+It's our team's belief that the best way to learn is through experience. Through the medium of video games, [Game name TBD] aims to provide an accurate simulation on how drivers should react when put into natural disaster situations. Players will be able to drive through levels based on real Oregon locations to see how they would react in emergency situations. Through game systems, players should be able to learn what actions they should and shouldn't do while having fun. 
 
 
 ## About Our Project
