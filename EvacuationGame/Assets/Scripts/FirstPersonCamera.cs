@@ -7,7 +7,6 @@ public class FirstPersonCamera : MonoBehaviour
     [SerializeField] float mouseSensitivity = 2f;
 
     float cameraVerticalRotation = 0f;
-    bool lockedCursor = true;
     Vector2 lookInput;
     float inputX, inputY;
     void Start()

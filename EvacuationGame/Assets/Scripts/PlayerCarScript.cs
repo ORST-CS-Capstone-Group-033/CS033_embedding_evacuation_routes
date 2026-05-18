@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerCarScript : MonoBehaviour
@@ -38,6 +39,7 @@ public class PlayerCarScript : MonoBehaviour
 
     [SerializeField] GameObject CrashEffect; // gameobject that is genreated during a crash.
     [SerializeField] GameSetup gameSetup;
+    [SerializeField] TextMeshProUGUI DebugHealthText; // likely too many variables at this point
     // Start is called before the first frame update
     void Start()
     {
@@ -47,16 +49,21 @@ public class PlayerCarScript : MonoBehaviour
         ogWheelPos = SteeringWheel.transform.localEulerAngles;
         driving = true;
         currentCarHealth = maxCarHealth;
+        if (DebugHealthText) // please move lat
+        {
+            int computation = (int)((currentCarHealth / maxCarHealth) * 100);
+
+            DebugHealthText.text = "Car Condition: " + computation.ToString() + "%";
+
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         DoCarInputs();
-
         if (Speedometer)
         {
-
             SpeedoTest();
         }
     }
@@ -152,7 +159,7 @@ public class PlayerCarScript : MonoBehaviour
         if (SteeringWheel)
         {
 
-            Quaternion quatOfCamera = Quaternion.Euler(ogWheelPos + new Vector3((225f * -XInput), 0, 0));
+            Quaternion quatOfCamera = Quaternion.Euler(ogWheelPos + new Vector3(0, 0, (225f * -XInput)));
             SteeringWheel.transform.localRotation = Quaternion.Lerp(SteeringWheel.transform.localRotation, quatOfCamera, steeringSpeed);
         }
     }
@@ -171,6 +178,12 @@ public class PlayerCarScript : MonoBehaviour
             crashEffectClone.GetComponent<ParticleSystem>().Emit(UnityEngine.Random.Range(5,10)); // a crash effect must have particle system inside.
             gameSetup.ModScore((int)force * 2);
             Destroy(crashEffectClone, 1.5f);
+            int computation = (int)((currentCarHealth / maxCarHealth) * 100);
+            if (DebugHealthText) // please move lat
+            {
+                DebugHealthText.text = "Car Condition: " + computation.ToString() + "%";
+
+            }
         }
         if (currentCarHealth < 0)
         {
@@ -217,11 +230,23 @@ public class PlayerCarScript : MonoBehaviour
     {
         Vector3 wOrigin = w.WheelTF.position;
         float rayAmount = w.wheelRadius + w.suspensionRest;
-
-        bool b = Physics.Raycast(wOrigin, -transform.up, out RaycastHit hit, rayAmount);
-
+        RaycastHit hit;
+        bool b = Physics.Raycast(wOrigin, -transform.up, out hit, rayAmount);
+        
         if (b)
         {
+            float frictionMod = 1;
+            float thrustMod = 1;
+            if (hit.collider.gameObject.layer == 3)
+            {
+                frictionMod = .5f;
+                thrustMod = .65f;
+
+            } else if(hit.collider.gameObject.layer == 6)
+            {
+                frictionMod = .975f;
+                thrustMod = 1f;
+            }
             w.grounded = true;
 
             float currentOffset = w.suspensionRest - (hit.distance - w.wheelRadius); // how compressed are we?
@@ -247,7 +272,7 @@ public class PlayerCarScript : MonoBehaviour
             if (steering)
             {
                 // Vibecoded part that gets the vector we want to apply forward force in.
-                forward = Quaternion.AngleAxis(XInput * steeringSpeed, hit.normal) * transform.forward;
+                forward = Quaternion.AngleAxis(XInput * steeringSpeed * thrustMod, hit.normal) * transform.forward;
                 steeringVisuals(w);
 
             }
@@ -268,8 +293,8 @@ public class PlayerCarScript : MonoBehaviour
             float desiredAcceleration = currentAcceleration;
 
 
-            float computedWheelForce = computeWheelForce(w, forwardSpeed, (springForce + damperPower));
-            if (YInput == -1 && w.angularVelocity < 0.1f) desiredAcceleration *= .25f;
+            float computedWheelForce = computeWheelForce(w, forwardSpeed, (springForce + damperPower)) * thrustMod;
+            if (YInput == -1 && w.angularVelocity < 0.1f) desiredAcceleration *= .45f;
 
            // a car's reverse gear usually has significantly less power
             // 1.5f is inertia, the higher it is the more the wheels resist against being changed in speed
@@ -282,7 +307,8 @@ public class PlayerCarScript : MonoBehaviour
 
 
             /// Rightward force is the velocity, times griplevel(the amonunt we will tolerate, 
-            float resultingSlipProduct = (-desiredVSwanted * w.sideGripLevel) * (springForce + damperPower);
+            /// 
+            float resultingSlipProduct = (-desiredVSwanted * (w.sideGripLevel * frictionMod)) * (springForce + damperPower);
 
             resultingSlipProduct = Mathf.Clamp(resultingSlipProduct, (springForce + damperPower) * -50f, (springForce + damperPower) * 50f); // why are we clamping?
             rb.AddForceAtPosition(rightward * resultingSlipProduct, hit.point);
@@ -291,7 +317,10 @@ public class PlayerCarScript : MonoBehaviour
 
             if (breaking && steering)
             {
-                rb.AddForceAtPosition(-forward * (550f * forwardSpeed * w.frontGripLevel), hit.point);
+                rb.AddForceAtPosition(-forward * (1000f * forwardSpeed * (w.frontGripLevel * frictionMod)), hit.point);
+              
+               
+               // w.angularVelocity -= 1250f * Time.fixedDeltaTime;
             }
         }
         else
@@ -303,6 +332,10 @@ public class PlayerCarScript : MonoBehaviour
         w.angularVelocity = Mathf.Clamp(w.angularVelocity, -maxEngineTorque, maxEngineTorque); // be sure to clamp velocity.
 
         w.angularVelocity *= .975f;
+        if(Mathf.Abs(w.angularVelocity) <= 2.5f)
+        {
+            w.angularVelocity *= 0f;
+        }
         if (w == w3) // only one non-steering wheel records 
         {
             recAngularVelo = Mathf.Abs(w.angularVelocity); // steering wheels control

@@ -16,7 +16,7 @@ public class GameSetup : MonoBehaviour
     int Score = 10000;
     int MaxScore = 10000;
     bool gameRunning = false;
-
+    public PrototypeTerrainThing obstacleGenerator; 
     [SerializeField] TextMeshProUGUI ScoreEndText;
 
 	// reference to the final time text     -- MM
@@ -28,15 +28,17 @@ public class GameSetup : MonoBehaviour
     // reference to the timer UI script     -- MM
     [SerializeField] TimerUI timerUI;
 
-	// reference to the fact panel          -- MM
-	FactPanel factPanel;
+    // reference to the fact panel          -- MM
+    [SerializeField] FactPanel factPanel;
 
     PlayerCarScript pCar;
 
     void Start()
     {
         if (RoadObject)
-            roadSetup();
+        {
+            //roadSetup();
+        }
 
         gameRunning = true;
 
@@ -45,7 +47,12 @@ public class GameSetup : MonoBehaviour
 
         // get the player car script        -- MM
         pCar = FindObjectOfType<PlayerCarScript>();
-	}
+        if (obstacleGenerator)
+        {
+            obstacleGenerator.CreateObstacles(Vector3.zero);
+        }
+
+    }
 
 	Vector3 readNextPoint(JsonPoint pointy) // this inherently does mapping to the origin point
     {
@@ -74,78 +81,7 @@ public class GameSetup : MonoBehaviour
 
     }
 
-    void roadSetup()
-    {
-        TextAsset bezierJSON = Resources.Load<TextAsset>("edgesAtt2");
-        EdgeMarker data = JsonUtility.FromJson<EdgeMarker>(bezierJSON.text); //vibecodeed
-        Debug.Log(data);
-        for (int i = 0; i < data.edges.Length; i++)
-        {
-            float randy = Random.Range(0, 100);
-            if (randy / 100 > obstacleLikelyhood && i + 1 != data.edges.Length)
-            {
-
-                Vector3 p1 = readNextPoint(data.edges[i].p1);
-                Vector3 p2 = readNextPoint(data.edges[i].p2);
-                Debug.Log(Vector3.Distance(p1, p2));
-
-                Vector3 midPoint = (p1 + p2) * .5f;
-                GameObject obstacleClone = Instantiate(roadObjects[Random.Range(0, roadObjects.Count)]);
-                obstacleClone.transform.position = midPoint;
-                obstacleClone.transform.rotation = Quaternion.LookRotation((p1 - p2).normalized);
-                obstacleClone.transform.parent = objectContainer.transform;
-
-
-            }
-        }
-
-        /*
-         * 
-         * 
-        for (int s = 0; s < data.edges.Length; s++)
-        {
-            var current = data.edges[s];
-            for (int i = 0; i < data.points.Length; i++)
-            {
-                float randy = Random.Range(0, 100);
-                if (randy / 100 > obstacleLikelyhood && i + 1 != data.points.Length)
-                {
-                    Vector3 nextPoint = readNextPoint(current[i + 1]);
-                    // Todo: fix scaling hack. Scaling shouldnt be this hard. The below vectors should be multiples for what we get.
-                    //Vector3(100,162.25621,100)
-                    Vector3 posCheck = RoadObject.transform.position + new Vector3(-current[i].x * RoadObject.transform.localScale.x / 100, current[i].z * RoadObject.transform.localScale.y / 162.25621f, -current[i].y * RoadObject.transform.localScale.z / 100);
-                    Debug.Log(Vector3.Distance(nextPoint, posCheck));
-                    if (Vector3.Distance(nextPoint, posCheck) < .001f)
-                    {
-                        continue;
-                    }
-                    else if (Vector3.Distance(nextPoint, posCheck) > 25f)
-                    {
-                        SpawnPile(posCheck, nextPoint);
-
-                    }
-                    else
-                    {
-                        Vector3 midPoint = (posCheck + nextPoint) * .5f;
-
-                        // Finally, we add some flux.
-
-                        Vector3 finalResult = midPoint + new Vector3(Random.Range(-10.5f, 10.5f), 0, Random.Range(-10.5f, 10.5f));
-                        GameObject obstacleClone = Instantiate(roadObjects[Random.Range(0, roadObjects.Count)]);
-                        obstacleClone.transform.position = finalResult;
-                        obstacleClone.transform.rotation = Quaternion.LookRotation((posCheck - nextPoint).normalized);
-
-                    }
-
-
-                }
-
-            }
-        }*/
-
-
-
-    }
+   
 
     // Updated for no coroutine, no auto-reload     -- MM
     public void StartEndScript()
@@ -172,6 +108,7 @@ public class GameSetup : MonoBehaviour
         finalPanel.SetActive(true);
 
         // Show the fact panel              -- MM
+        
         var (theme, source, quote) = FactManager.Instance.GetRandomFact();
         factPanel.Show(theme, source, quote);
 	}

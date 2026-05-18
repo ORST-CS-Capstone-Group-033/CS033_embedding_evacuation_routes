@@ -22,7 +22,6 @@ public class TreeGenerator : MonoBehaviour
     int curTreeValue;
     int maxAmtVerts = 128;
     int skipBy = 4;
-    int currentVerts = 0;
     void Start()
     {
         hardLimitTrees = 2048;
