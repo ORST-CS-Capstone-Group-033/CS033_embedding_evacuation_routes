@@ -1,6 +1,7 @@
 import rasterio
 import numpy as np
 import sys
+import csv
 #from osgeo import ogr
 
 #rasterio is for terrain geotiff
@@ -11,8 +12,12 @@ import sys
 rasterXSize = 0 #how many indices per row
 
 #test data for start and end point
-start = (542410.0, 4944193.0)
-end = (542430.0, 4944173.0)
+#start = (542410.0, 4944193.0)
+#end = (542430.0, 4944173.0)
+
+#for lat/lon testing
+start = (-121.706924, 45.283897)
+end = (-121.706856, 45.283676)
 
 #Terrain tif file data:
 band = None
@@ -32,8 +37,10 @@ transf = rasterio.Affine(0.0, 0.0, 0.0,
 
 road_coords = [] #stores the GPKG road coordinates
 
-file_path = 'salem.tif' #file path to tif file
+file_path = 'thing4.tif' #file path to tif file
 gpkg_file_path = 'testRoad.gpkg'
+road_coordinate_file_path = 'capstone_roads.csv'
+output_file_path = 'outputRoad.csv'
 
 
 ###-----------------ToDo-----------------###
@@ -61,6 +68,10 @@ def openTIF(file_path):
     global rasterXSize
     with rasterio.open(file_path) as src:
         band = src.read(1)
+        #for some reason, band is saved as (y,x).
+        transposed_band = band.T
+        band = transposed_band
+
         tempbounds = src.bounds
         #print('tempbounds = ', tempbounds) test print
         bounds = [tempbounds.left, tempbounds.bottom, tempbounds.right, tempbounds.top]
@@ -69,11 +80,45 @@ def openTIF(file_path):
 
         rasterXSize = src.width
         print('--------------------tif file data-----------------------')
-        print('band saved as: ', band)
+        print('band saved as: ', band.shape)
         print('bounds saved as: ', bounds)
-        print('transf saved as: ', transf)
+        print(f'transf saved as: ', {transf:.5})
         print('rasterXSize saved as: ', rasterXSize)
         return 1
+
+
+#Function name: readRoadCSV
+#Parameters: N/A
+#Description: Take an input csv (containing (lon,lat) road datapoints seperated by spaces for each segment)
+#Additional notes: Returns as array of (lon,lat). Input csv file path is defined globally at top of file
+def readRoadCSV():
+    roads = []
+    currRoad = []
+
+    with open(road_coordinate_file_path, "r", newline="") as csvfile:
+        roadInput = csv.reader(csvfile)
+
+        for row in roadInput:
+
+            #if row is empty, save as empty to signify end of road array
+            if len(row) == 0 or all(cell.strip() == "" for cell in row):
+                if len(currRoad) >= 2:  #road needs at least two points
+                    roads.append(currRoad)
+                
+                currRoad = []
+                continue
+            
+            try:
+                lon = float(row[0].strip())
+                lat = float(row[1].strip())
+            except ValueError:
+                #skip header row
+                continue
+
+            currRoad.append((lon, lat))
+
+    return roads
+
 
 
 #Function name: indiceTo2DCoord
@@ -126,6 +171,10 @@ def barycentricZVal(stuVal, tri1, tri2, tri3):
     #use the stu values to calculate the z value at a point
     #print('testing for z val coordinates: ', tri1, tri2, tri3)
 
+    tri1 = np.array(tri1[:2], dtype=int)
+    tri2 = np.array(tri2[:2], dtype=int)
+    tri3 = np.array(tri3[:2], dtype=int)
+
     interpVal = stuVal[0]*band[tri1[0],tri1[1]] + stuVal[1]*band[tri2[0],tri2[1]] + stuVal[2]*band[tri3[0],tri3[1]]
     #tri[2] is the z-coordinate
     
@@ -135,6 +184,23 @@ def barycentricZVal(stuVal, tri1, tri2, tri3):
     return interpVal
 
 
+#Function name: calculateZVal
+#Parameters: current point (pixel coordinate location), triCoords (pixel coordinates of each triangle vertex currentPoint is within)
+#Description: Calculates the Z value for a point without all the extra steps from findLatLonLocation
+#Additional notes:
+def calculateZVal(currentPoint, triCoords):
+    pixelX = currentPoint[0]
+    pixelY = currentPoint[1]
+
+    tri1 = triCoords[0]
+    tri2 = triCoords[1]
+    tri3 = triCoords[2]
+
+    stuVal = barycentricConversion(pixelX, pixelY, tri1, tri2, tri3)
+    zVal = barycentricZVal(stuVal, tri1, tri2, tri3)
+
+    return zVal
+
 #Function name: findLatLonLocation
 #Parameters: lat (latitude value), lon (longitudinal value), transf (geotransform data from terrain tif)
 #Description: Converts a lat/lon road coordinate value into pixel coordinates. Determines which triangle within each square grid the road coordinate belongs in
@@ -143,7 +209,7 @@ def barycentricZVal(stuVal, tri1, tri2, tri3):
 def findLatLonLocation(lat, lon, transf):
 
     #print('transform: ', transf.c)
-    #print('lat, lon', lat, lon)
+    print('lat, lon', lat, lon)
     
     #miscomunication here, lat = world_x and lon = world_y
     pixelY = (lon - transf.f) / transf.e
@@ -525,30 +591,13 @@ def findNextTriangleEdge(p, triCoords, dir):
     
     #Of the three edges, none passed (this shouldn't happen)
     raise RuntimeError("No valid next edge intersection found")
-    
 
 
-###--------------Main Function---------------###
-
-if __name__ == "__main__":
-    openTIF(file_path)
-    print('Save tif variables: Passed')
-    #Saving road coordinate values using gpkg would go here
-    #print('Save gpkg variables: Passed')
-
-
-    #------------------------------------Outside loop logic goes here:-------------------------------------
-
-    #Needs to: choose a start and end point based on road coordinate array
-    #Calculate the initial values to use within the inner loop (this part is done)
-
-    #Get and read road coordinate array:
-
-    #Choose start/end value to use
-
-    #add stuff here
-
-
+#Function name: roadSegmentCalc
+#Parameters: start (lon,lat of starting point), end (lon,lat of end point), transf (file containing terrain metadata)
+#Description: Given a start and end point, calculate the edges between and create a new roadpoint at each edge/vertice with a calculated z-value
+#Additional notes: Loop ends at 100 itterations. If start/end datapoints have more than 100 edges between, increase the failSafe int
+def roadSegmentCalc(start, end, transf):
     #Get initial pixel coordinate values from start/finish coordinates
 
     triStartCoord1, triStartCoord2, triStartCoord3, tri1STU, startZval, pixelCoordStart = findLatLonLocation(start[0], start[1], transf)
@@ -570,13 +619,14 @@ if __name__ == "__main__":
     pointLocationVar = findPointLocation(tri1STU[0], tri1STU[1], tri1STU[2])
 
     #Define initial currentPoint, endPoint, and direction vector
-    colinearVal = 0 #0 means not colinear, 1 means colinear
+    colinearVal = 0 #0 means not colinear, 1 means colinear. Currently defunct as not needed
     currentPoint = np.array(pixelCoordStart, dtype=float)
     endPoint = np.array(pixelCoordEnd, dtype=float)
     dir = directionVector(currentPoint, endPoint)
 
     #testing array to store walked points:
     walkedPoints = []
+    walkedPoints.append(np.array([currentPoint[0], currentPoint[1], startZval], dtype=float))
 
     #Update triCoords value based on where within the triangle currentPoint is
     print('--------------------initial current triangle calculations-----------------------')
@@ -647,7 +697,8 @@ if __name__ == "__main__":
             dir = directionVector(np.array(currentPoint, dtype=float), np.array(pixelCoordEnd, dtype=float))
             currentPoint = findNextTriangleEdge(currentPoint, triCoords, dir)
  
-        
+        #Calculate Z value 
+        tempZVal = calculateZVal(currentPoint, triCoords)
         #Step 2: Find vertice coordinates of next triangle (triCoords)
         print('currentPoint: ', currentPoint)
         triCoordsSTU = barycentricConversion(currentPoint[0], currentPoint[1], triCoords[0], triCoords[1], triCoords[2])
@@ -678,7 +729,7 @@ if __name__ == "__main__":
 
             #Potentially, calculate if direction is colinear here
 
-            walkedPoints.append(np.array([currentPoint[0], currentPoint[1], 0.0], dtype=float))
+            #walkedPoints.append(np.array([currentPoint[0], currentPoint[1], 0.0], dtype=float))
                 
         elif(pointLocationVar == 3):
             #point is walking from edge of triangle to edge of triangle
@@ -686,21 +737,96 @@ if __name__ == "__main__":
             triCoords = meshWalkFromEdge(triCoords[0], triCoords[1], triCoords[2], triCoordsSTU[0], triCoordsSTU[1], triCoordsSTU[2], dir) #assume direction vector d
             
             #testing array to store points:
-            walkedPoints.append(np.array([currentPoint[0], currentPoint[1], 0.0], dtype=float))
+            #walkedPoints.append(np.array([currentPoint[0], currentPoint[1], 0.0], dtype=float))
 
-
+        
+        walkedPoints.append(np.array([currentPoint[0], currentPoint[1], tempZVal], dtype=float))
         print('updated triCoords value:', triCoords)
         print('End loop itteration')
 
-
-    print('-------------Calculations end here-------------------')
-
-    print('Coordinate Connectors: ')
-    for i, coords in enumerate(walkedPoints):
-        print('coordinate number: ', i + 1)
-        print('coordinate value: ', coords[0], coords[1])
-        world_x, world_y = rasterio.transform.xy(transf, coords[1], coords[0], offset='ul') #print in terms of world coords
-        print('world coords:' , world_x.item(), world_y.item())
+    walkedPoints.append(np.array([pixelCoordEnd[0], pixelCoordEnd[1], endZval], dtype=float))
+    return walkedPoints
 
 
+#Function name: exportRoadCSV
+#Parameters: roads (array of all created row datapoints [x,y,z])
+#Description: Output a .csv file containing all road segments with newly created datapoints between
+#Additional notes: Road segments seperated with space. Each row seperated data via comma.
+def exportRoadCSV(roads):
+    with open(output_file_path, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(["x","y","z"])
+        for road in roads:
+            for p in road:
+                #add scale value parameters
+                x = p[0] * 4
+                y = p[1] * 4
+                z = p[2] * 1 #no scale
 
+                #flip y axis value to align with terrain
+                y = -y
+
+                writer.writerow([x,y,z])
+            
+            #break #test break to save only first road segment
+
+            writer.writerow([]) #seperate segments with space
+
+
+###--------------Main Function---------------###
+
+if __name__ == "__main__":
+    openTIF(file_path)
+    print('Save tif variables: Passed')
+    #Saving road coordinate values using gpkg would go here
+    #print('Save gpkg variables: Passed')
+
+
+    #------------------------------------Outside loop logic goes here:-------------------------------------
+
+    #Needs to: choose a start and end point based on road coordinate array
+    #Calculate the initial values to use within the inner loop (this part is done)
+
+    #Get and read road coordinate array:
+
+    #Choose start/end value to use
+
+    inputRoads = readRoadCSV()
+    print('Number of roads in input CSV: ', len(inputRoads))
+
+    outputRoads = [] #stores list of all calculated road segments
+
+    for roadIndex, currRoadPoints in enumerate(inputRoads):
+
+        fullRoadPoints = [] #stores list of one road segment (multiple road points)
+        for i in range(len(currRoadPoints) - 1):
+
+            walkedPoints = roadSegmentCalc(currRoadPoints[i],currRoadPoints[i+1],transf)            
+
+            #avoid duplication when changing start/end points. If not first itteration, don't save start (as it's duplicate of previous end)
+            if i == 0:
+                fullRoadPoints.extend(walkedPoints)
+            else:
+                fullRoadPoints.extend(walkedPoints[1:])
+
+        outputRoads.append(fullRoadPoints)
+
+
+        print('-------------Calculations end here-------------------')
+
+        print('Coordinate Connectors: ')
+        for i, coords in enumerate(fullRoadPoints):
+            print('coordinate number: ', i + 1)
+            print('coordinate value: ', coords[0], coords[1], coords[2])
+            world_x, world_y = rasterio.transform.xy(transf, coords[1], coords[0], offset='ul') #print in terms of world coords
+            print('world coords:' , world_x.item(), world_y.item())
+
+    #create csv using roadpoints calculated
+    exportRoadCSV(outputRoads)
+
+#aditional notes (now outdated)
+
+#Use pixel coordinates to map to the terrain mesh. World coords is just for testing
+#also, if scaled, multiply pixel coordinates by scale. Center (origin) is 0 for terrain so no need to adjust
+
+#Also, for this instance, y pixel coordinate value should be negative
